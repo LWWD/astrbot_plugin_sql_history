@@ -1,0 +1,27 @@
+{
+  "host": {
+    "description": "host",
+    "type": "string",
+    "hint": "必填"
+  },
+  "port": {
+    "description": "port",
+    "type": "int",
+    "hint": "必填"
+  },
+  "database": {
+    "description": "db",
+    "type": "string",
+    "hint": "必填"
+  },
+  "username": {
+    "description": "username",
+    "type": "string",
+    "hint": "必填"
+  },
+  "password": {
+    "description": "password",
+    "type": "string",
+    "hint": "必填"
+  }
+}

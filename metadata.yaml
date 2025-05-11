@@ -1,5 +1,5 @@
-name: mysql_logger # 这是你的插件的唯一识别名。
-desc: MySQL存储。 # 插件简短描述
-version: v1.0 # 插件版本号。格式：v1.1.1 或者 v1.1
-author: LW # 作者
-repo: https://github.com/Soulter/helloworld # 插件的仓库地址
+name: mysql_logger
+desc: MySQL存储聊天记录,群史官
+version: v1.0
+author: LW
+repo: https://github.com/LWWD/bot_mysql

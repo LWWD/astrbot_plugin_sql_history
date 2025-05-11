@@ -1,14 +1,16 @@
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
+from astrbot.api import AstrBotConfig
 import aiomysql
 import json
 from typing import Optional
 
 
-@register("mysql_logger", "YourName", "MySQL消息日志插件", "1.0.0")
+@register("mysql_logger", "LW", "MySQL消息日志插件", "1.0.0")
 class MySQLPlugin(Star):
-    def __init__(self, context: Context):
+    def __init__(self, context: Context, config: AstrBotConfig):
         super().__init__(context)
+        self.config = config
         self.pool: Optional[aiomysql.Pool] = None  # 先初始化为 None
 
     async def initialize(self):
@@ -16,11 +18,11 @@ class MySQLPlugin(Star):
         try:
             # 正确创建连接池
             self.pool = await aiomysql.create_pool(
-                host='192.168.199.109',
-                port=33306,
-                user='root',
-                password='beifa888',
-                db='qq_bot',
+                host=self.config.get("host"),
+                port=self.config.get("port"),
+                user=self.config.get("username"),
+                password=self.config.get("password"),
+                db=self.config.get("database"),
                 autocommit=True,
                 minsize=1,
                 maxsize=5
@@ -38,18 +40,19 @@ class MySQLPlugin(Star):
             async with self.pool.acquire() as conn:
                 async with conn.cursor() as cursor:
                     await cursor.execute("""
-                        CREATE TABLE IF NOT EXISTS messages (
-                            message_id VARCHAR(255) PRIMARY KEY,
-                            platform_type VARCHAR(50) NOT NULL,
-                            self_id VARCHAR(255) NOT NULL,
-                            session_id VARCHAR(255) NOT NULL,
-                            group_id VARCHAR(255),
-                            sender JSON NOT NULL,
-                            message_str TEXT NOT NULL,
-                            raw_message LONGTEXT,
-                            timestamp INT NOT NULL
-                        )
-                    """)
+                                         CREATE TABLE IF NOT EXISTS messages
+                                         (
+                                             message_id    VARCHAR(255) PRIMARY KEY,
+                                             platform_type VARCHAR(50)  NOT NULL,
+                                             self_id       VARCHAR(255) NOT NULL,
+                                             session_id    VARCHAR(255) NOT NULL,
+                                             group_id      VARCHAR(255),
+                                             sender        JSON         NOT NULL,
+                                             message_str   TEXT         NOT NULL,
+                                             raw_message   LONGTEXT,
+                                             timestamp     INT          NOT NULL
+                                         )
+                                         """)
         except Exception as e:
             # 建议添加更详细的错误处理
             print(f"初始化失败: {str(e)}")
