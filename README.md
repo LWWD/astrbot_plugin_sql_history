@@ -1,5 +1,5 @@
 # MySQL存储
-
+(支持 MySQL8 )
 记录历史聊天信息, 会自动创建message表
 
 ```sql
